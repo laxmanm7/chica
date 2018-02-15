@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE dataset SYSTEM "test/dbunitFiles/tableSetupDTD.dtd">
+<dataset>
+	<chica_study_attribute study_attribute_id="1" name="Custom Randomizer" description="Custom randomization class" creator="1" date_created="2018-02-09 02:03:00.0" voided="false" uuid="6c40efe5-0b6e-11e8-a6f6-847beb222622" />
+	<chica_study_attribute study_attribute_id="2" name="presnetUrl" description="URL used to send information to the PresNet website" creator="1" date_created="2018-02-09 02:03:00.0" voided="false" uuid="6c40f20f-0b6e-11e8-a6f6-847beb222622" />
+	<chica_study_attribute study_attribute_id="3" name="TEST" description="TEST DESC" creator="1" date_created="2018-02-09 02:03:00.0" voided="false" uuid="ca5a14e9-0ed1-43f3-b62b-2f05620d1468" />
+</dataset>

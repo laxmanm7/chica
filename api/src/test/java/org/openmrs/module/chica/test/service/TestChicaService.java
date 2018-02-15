@@ -1,9 +1,12 @@
 package org.openmrs.module.chica.test.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -13,8 +16,11 @@ import org.openmrs.FormField;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atd.service.ATDService;
+import org.openmrs.module.chica.hibernateBeans.StudyAttribute;
+import org.openmrs.module.chica.service.ChicaService;
 import org.openmrs.module.chica.test.TestUtil;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.Verifies;
 
 /**
  * @author Tammy Dugan
@@ -101,5 +107,87 @@ public class TestChicaService extends BaseModuleContextSensitiveTest
 			}
 		}
 		
+	}
+	
+	/**
+	 * @see org.openmrs.module.chica.service.ChicaService#getStudyAttributeByName(String)
+	 */
+	@Test
+	@Verifies(value = "Retreives a StudyAttribute by name", method = "getStudyAttributeByName(String)")
+	public void getStudyAttributeByName_shouldRetreiveStudyAttribute() throws Exception {
+		executeDataSet("dbunitFiles/studyAttributeTest.xml");
+		StudyAttribute studyAttribute = Context.getService(ChicaService.class).getStudyAttributeByName("Custom Randomizer");
+		System.out.println("ID::"+studyAttribute.getId());
+		System.out.println("DESCRIPTION::"+studyAttribute.getDescription());
+		System.out.println("CREATOR::"+studyAttribute.getCreator());
+		System.out.println("UUID::"+studyAttribute.getUuid());
+	}
+
+	/**
+	 * @see org.openmrs.module.chica.service.ChicaService#saveStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)
+	 */
+	@Test
+	@Verifies(value = "should create new StudyAttribute", method = "saveStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)")
+	public void saveStudyAttribute_shouldCreateNewStudyAttribute() throws Exception {
+		
+		executeDataSet("dbunitFiles/studyAttributeTest.xml");
+		StudyAttribute studyAttribute = new StudyAttribute("NEW TEST", "New TEST DESC");
+		Context.getService(ChicaService.class).saveStudyAttribute(studyAttribute);//"NEW TEST", "New TEST DESC");
+		System.out.println("ID::"+studyAttribute.getStudyAttributeId());
+		System.out.println("UUID::"+studyAttribute.getUuid());
+		System.out.println("CREATOR::"+studyAttribute.getCreator());
+		System.out.println("DATE CREATED::"+studyAttribute.getDateCreated());
+	}
+	
+	/**
+	 * @see org.openmrs.module.chica.service.ChicaService#voidStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute, String)
+	 */
+	@Test
+	@Verifies(value = "should void strudyAttribute with the given reason", method = "voidStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute, String)")
+	public void voidStudyAttribute_shouldVoidStudyAttributeWithTheGivenReason() throws Exception {
+		executeDataSet("dbunitFiles/studyAttributeTest.xml");
+		StudyAttribute studyAttribute = Context.getService(ChicaService.class).getStudyAttributeByName("Custom Randomizer");
+		Context.getService(ChicaService.class).voidStudyAttribute(studyAttribute, "Test Voiding StudyAttribute");
+		System.out.println("VOIDED::"+studyAttribute.getVoided());
+		System.out.println("VOIDED BY::"+studyAttribute.getVoidedBy());
+		System.out.println("DATE VOIDED::"+studyAttribute.getDateVoided());
+		System.out.println("VOIDED REASON::"+studyAttribute.getVoidReason());
+	}
+	
+	/**
+	 * @see org.openmrs.module.chica.service.ChicaService#unvoidStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)
+	 */
+	@Test
+	@Verifies(value = "should unvoid voided studyAttribute", method = "unvoidStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)")
+	public void unvoidStudyAttribute_shouldUnvoidVoidedStudyAttribute() throws Exception {
+		executeDataSet("dbunitFiles/studyAttributeTest.xml");
+		StudyAttribute studyAttribute = Context.getService(ChicaService.class).getStudyAttributeByName("Custom Randomizer");
+		Context.getService(ChicaService.class).unvoidStudyAttribute(studyAttribute);
+		System.out.println("UNVOIDED::"+studyAttribute.getVoided());
+		System.out.println("UNVOIDED BY::"+studyAttribute.getVoidedBy());
+		System.out.println("DATE UNVOIDED::"+studyAttribute.getDateVoided());
+		System.out.println("UNVOIDED REASON::"+studyAttribute.getVoidReason());
+	}
+	
+	
+	private StudyAttribute createTestStudyAttribute() {
+		StudyAttribute studyAttribute = new StudyAttribute("TEST STUDY ATT", "TEST STUDY ATT DESC");
+		studyAttribute.setUuid(UUID.randomUUID().toString());
+		studyAttribute.setDateCreated(new Date());
+		studyAttribute.setCreator(Context.getAuthenticatedUser());
+		return studyAttribute;
+	}
+	
+	@Test
+	public void testStudyAttribute() {
+		StudyAttribute studyAttribute = createTestStudyAttribute();
+		System.out.println(studyAttribute.getStudyAttributeId());
+		System.out.println(studyAttribute.getName());
+		System.out.println(studyAttribute.getDescription());
+		System.out.println(studyAttribute.getCreator());
+		System.out.println(studyAttribute.getUuid());
+		System.out.println(studyAttribute.getDateCreated());
+		assertEquals(1, studyAttribute.getCreator().getId().intValue());
+		assertNotNull(studyAttribute.getDateCreated());
 	}
 }

@@ -14,6 +14,7 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.module.atd.xmlBeans.Field;
 import org.openmrs.module.chica.Percentile;
 import org.openmrs.module.chica.hibernateBeans.Bmiage;
@@ -29,6 +30,7 @@ import org.openmrs.module.chica.hibernateBeans.Hcageinf;
 import org.openmrs.module.chica.hibernateBeans.Lenageinf;
 import org.openmrs.module.chica.hibernateBeans.PatientFamily;
 import org.openmrs.module.chica.hibernateBeans.Study;
+import org.openmrs.module.chica.hibernateBeans.StudyAttribute;
 import org.openmrs.module.chica.hibernateBeans.StudyAttributeValue;
 import org.openmrs.module.chica.hibernateBeans.StudySubject;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstance;
@@ -262,4 +264,64 @@ public interface ChicaService
 	 * @param glookoCode
 	 */
 	public void addGlookoCodePersonAttribute(String firstName, String lastName, String dateOfBirth, String glookoCode);
+	
+	/**
+	 * Inserts or updates the given StudyAttribute object 
+	 * 
+	 * @param studyAttribute Study Attribute to be created or updated
+	 */
+	
+	public void saveStudyAttribute(StudyAttribute studyAttribute); 
+	
+	/**
+	 * Voids the StudyAttribute.
+	 * 
+	 * @param studyAttribute StudyAttribute to void
+	 * @param voidReason String reason the studyAttribute is being voided.
+	 * @throws APIException
+	 */
+	public void voidStudyAttribute(StudyAttribute studyAttribute, String voidReason) throws APIException;
+
+	/**
+	 * Unvoid StudyAttribute in the database, effectively marking this as a valid StudyAttribute again
+	 * 
+	 * @param studyAttribute StudyAttribute to unvoid
+	 * @throws APIException
+	 */
+	public void unvoidStudyAttribute(StudyAttribute studyAttribute) throws APIException;
+
+	/**
+	 * Retrieves StudyAttribute by Study Attribute Name
+	 * 
+	 * @param studyAttributeName Study Attribute Name 
+	 * @return StudyAttribute Object
+	 */
+	
+	public StudyAttribute getStudyAttributeByName(String studyAttributeName);
+	
+	/**
+	 * Inserts or updates the given StudyAttributeValue object 
+	 * 
+	 * @param studyAttributeValue Study Attribute Value to be created or updated
+	 */
+	
+	public void saveStudyAttributeValue(StudyAttributeValue studyAttributeValue); 
+	
+	/**
+	 * Voids the StudyAttributeValue.
+	 * 
+	 * @param studyAttributeValue StudyAttributeValue to void
+	 * @param voidReason String reason the studyAttributeValue is being voided.
+	 * @throws APIException
+	 */
+	public void voidStudyAttributeValue(StudyAttributeValue studyAttributeValue, String voidReason) throws APIException;
+
+	/**
+	 * Unvoid StudyAttributeValue in the database, effectively marking this as a valid StudyAttributeValue again
+	 * 
+	 * @param studyAttributeValue StudyAttributeValue to unvoid
+	 * @throws APIException
+	 */
+	public void unvoidStudyAttributeValue(StudyAttributeValue studyAttributeValue) throws APIException;
+
 }

@@ -9,6 +9,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.api.db.DAOException;
 import org.openmrs.module.chica.Percentile;
 import org.openmrs.module.chica.hibernateBeans.Bmiage;
 import org.openmrs.module.chica.hibernateBeans.Chica1Appointment;
@@ -23,6 +24,7 @@ import org.openmrs.module.chica.hibernateBeans.Hcageinf;
 import org.openmrs.module.chica.hibernateBeans.Lenageinf;
 import org.openmrs.module.chica.hibernateBeans.PatientFamily;
 import org.openmrs.module.chica.hibernateBeans.Study;
+import org.openmrs.module.chica.hibernateBeans.StudyAttribute;
 import org.openmrs.module.chica.hibernateBeans.StudyAttributeValue;
 import org.openmrs.module.chica.hibernateBeans.StudySubject;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.PatientState;
@@ -186,4 +188,28 @@ public interface ChicaDAO {
 	 * @return
 	 */
 	public List<PatientState> getReprintRescanStatesBySessionId(Integer sessionId, Date optionalDateRestriction, List<Integer> locationTagIds,Integer locationId) throws HibernateException;
+	
+	/***
+	 * Inserts or updates the given StudyAttribute object to the database
+	 * 
+	 * @param studyAttribute
+	 * @throws DAOException
+	 */
+	public void saveStudyAttribute(StudyAttribute studyAttribute) throws DAOException;
+
+	/**
+	 * Retrieves Study Attribute by Name
+	 * 
+	 * @param studyAttributeName Study Attribute Name
+	 * @return StudyAttribute Object
+	 */
+	public StudyAttribute getStudyAttributeByName(String studyAttributeName);
+	
+	/***
+	 * Inserts or updates the given StudyAttributeValue object to the database
+	 * 
+	 * @param studyAttributeValue
+	 * @throws DAOException
+	 */
+	public void saveStudyAttributeValue(StudyAttributeValue studyAttributeValue) throws DAOException;
 }

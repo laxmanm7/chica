@@ -4539,6 +4539,77 @@ from chica_insurance_category where ecw_ins_name is not null and category is not
 			Delete From global_property WHERE property IN ('chica.filterHL7RegistrationOnPriorCheckin');
 		</sql>
 	</diff>    
+	<diff>
+		<version>1.10.7</version>
+		<author>Seema Sarala</author>
+		<date>February 02, 2018</date>
+		<description>
+			Alter chica_study_attribute table to add new columns creator, date_created, voided, voided_by, date_voided, void_reason, uuid, changed_by and date_changed.
+			Add constraints to the fields.
+			Update the field values uuid, changed_by and date_changed for existing rows.
+		</description>
+		<sql>
+			ALTER TABLE chica_study_attribute 
+			ADD COLUMN creator int(11) NOT NULL default 0,
+			ADD COLUMN date_created datetime NOT NULL default '0000-00-00 00:00:00',
+			ADD COLUMN voided tinyint(1) NOT NULL default 0,
+			ADD COLUMN voided_by int(11) default NULL,
+			ADD COLUMN date_voided datetime default NULL,
+			ADD COLUMN void_reason varchar(255) default NULL,
+			ADD COLUMN uuid char(38) NOT NULL,
+			ADD COLUMN changed_by int(11)default NULL,
+			ADD COLUMN date_changed datetime default NULL;
+			
+			UPDATE chica_study_attribute
+			SET 
+			uuid = UUID(),
+			changed_by = 1,
+			creator = 1,
+			date_changed = NOW()
+			WHERE name IN ('Custom Randomizer', 'presnetUrl');
+		
+			ALTER TABLE chica_study_attribute 
+			ADD CONSTRAINT chica_study_attribute_fk FOREIGN KEY (creator) REFERENCES users (user_id),
+			ADD CONSTRAINT user_who_voided_chica_study_attribute FOREIGN KEY (voided_by) REFERENCES users (user_id),
+			ADD CONSTRAINT chica_study_attribute_changed_by FOREIGN KEY(changed_by) REFERENCES users(user_id);
+		</sql>
+	</diff>   
+	<diff>
+		<version>1.10.8</version>
+		<author>Seema Sarala</author>
+		<date>February 14, 2018</date>
+		<description>
+			Alter chica_study_attribute_value table to add new columns creator, date_created, voided, voided_by, date_voided, void_reason, uuid, changed_by and date_changed.
+			Add constraints to the fields.
+			Update the field values uuid, changed_by and date_changed for existing rows.
+		</description>
+		<sql>
+			ALTER TABLE chica_study_attribute_value 
+			ADD COLUMN creator int(11) NOT NULL default 0,
+			ADD COLUMN date_created datetime NOT NULL default '0000-00-00 00:00:00',
+			ADD COLUMN voided tinyint(1) NOT NULL default 0,
+			ADD COLUMN voided_by int(11) default NULL,
+			ADD COLUMN date_voided datetime default NULL,
+			ADD COLUMN void_reason varchar(255) default NULL,
+			ADD COLUMN uuid char(38) NOT NULL,
+			ADD COLUMN changed_by int(11)default NULL,
+			ADD COLUMN date_changed datetime default NULL;
+			
+			UPDATE chica_study_attribute_value a, chica_study b, chica_study_attribute c 
+			SET
+			a.uuid = UUID(),
+			a.changed_by = 1,
+			a.creator = 1,
+			a.date_changed = NOW()
+			WHERE a.study_attribute_value_id = b.study_id and a.study_attribute_id = c.study_attribute_id ;
+
+			ALTER TABLE chica_study_attribute_value 
+			ADD CONSTRAINT chica_study_attribute_value_fk FOREIGN KEY (creator) REFERENCES users (user_id),
+			ADD CONSTRAINT user_who_voided_chica_study_attribute_value FOREIGN KEY (voided_by) REFERENCES users (user_id),
+			ADD CONSTRAINT chica_study_attribute_value_changed_by FOREIGN KEY(changed_by) REFERENCES users(user_id);
+		</sql>
+	</diff>   
+	
 </sqldiff>
 
 

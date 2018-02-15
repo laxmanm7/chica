@@ -1,11 +1,13 @@
 package org.openmrs.module.chica.hibernateBeans;
 
+import org.openmrs.BaseOpenmrsData;
+
 /**
  * Holds information to store in the chica_study_attribute_value table
  * 
  * @author Tammy Dugan
  */
-public class StudyAttributeValue implements java.io.Serializable {
+public class StudyAttributeValue extends BaseOpenmrsData implements java.io.Serializable {
 
 	// Fields
 	private Integer studyAttributeValueId = null;
@@ -17,6 +19,12 @@ public class StudyAttributeValue implements java.io.Serializable {
 
 	/** default constructor */
 	public StudyAttributeValue() {
+	}
+	
+	public StudyAttributeValue(Integer studyId, String value, Integer studyAttributeId) {
+		setStudyId(studyId);//9
+		setValue(value);
+		setStudyAttributeId(studyAttributeId);//1
 	}
 
 	/**
@@ -82,4 +90,65 @@ public class StudyAttributeValue implements java.io.Serializable {
 	{
 		this.value = value;
 	}
+
+	@Override
+	public Integer getId() {
+		return getStudyAttributeValueId();
+	}
+
+	@Override
+	public void setId(Integer id) {
+		setStudyAttributeValueId(id);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((studyAttributeId == null) ? 0 : studyAttributeId.hashCode());
+		result = prime * result + ((studyAttributeValueId == null) ? 0 : studyAttributeValueId.hashCode());
+		result = prime * result + ((studyId == null) ? 0 : studyId.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StudyAttributeValue other = (StudyAttributeValue) obj;
+		if (studyAttributeId == null) {
+			if (other.studyAttributeId != null)
+				return false;
+		} else if (!studyAttributeId.equals(other.studyAttributeId))
+			return false;
+		if (studyAttributeValueId == null) {
+			if (other.studyAttributeValueId != null)
+				return false;
+		} else if (!studyAttributeValueId.equals(other.studyAttributeValueId))
+			return false;
+		if (studyId == null) {
+			if (other.studyId != null)
+				return false;
+		} else if (!studyId.equals(other.studyId))
+			return false;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "StudyAttributeValue [studyAttributeValueId=" + studyAttributeValueId + ", studyId=" + studyId
+				+ ", studyAttributeId=" + studyAttributeId + ", value=" + value + "]";
+	}
+	
+	
 }

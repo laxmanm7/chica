@@ -19,6 +19,12 @@ public class StudyAttribute extends BaseOpenmrsData implements java.io.Serializa
 
 	/** default constructor */
 	public StudyAttribute() {
+		
+	}
+	
+	public StudyAttribute(String name, String description) {
+		setName(name);
+		setDescription(description);
 	}
 
 
@@ -86,4 +92,52 @@ public class StudyAttribute extends BaseOpenmrsData implements java.io.Serializa
 	public void setId(Integer id) {
 		setStudyAttributeId(id);
 	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((studyAttributeId == null) ? 0 : studyAttributeId.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StudyAttribute other = (StudyAttribute) obj;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (studyAttributeId == null) {
+			if (other.studyAttributeId != null)
+				return false;
+		} else if (!studyAttributeId.equals(other.studyAttributeId))
+			return false;
+		return true;
+	}
+
+
+	@Override
+	public String toString() {
+		return "StudyAttribute [studyAttributeId=" + studyAttributeId + ", name=" + name + ", description="
+				+ description + "]";
+	}
+	
+	
 }

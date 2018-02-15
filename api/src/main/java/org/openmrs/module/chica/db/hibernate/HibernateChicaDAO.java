@@ -27,6 +27,7 @@ import org.openmrs.api.LocationService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.db.DAOException;
 import org.openmrs.module.chica.Percentile;
 import org.openmrs.module.chica.db.ChicaDAO;
 import org.openmrs.module.chica.hibernateBeans.Bmiage;
@@ -172,7 +173,7 @@ public class HibernateChicaDAO implements ChicaDAO
 		return null;
 	}
 
-	private StudyAttribute getStudyAttributeByName(String studyAttributeName)
+	public StudyAttribute getStudyAttributeByName(String studyAttributeName)
 	{
 		try
 		{
@@ -1137,5 +1138,19 @@ public class HibernateChicaDAO implements ChicaDAO
 
     	qry.addEntity(PatientState.class);
     	return qry.list();
+    }
+    
+    /**
+     * @see org.openmrs.module.chica.db.ChicaDAO#saveStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)
+     */
+    public void saveStudyAttribute(StudyAttribute studyAttribute) throws DAOException {
+   		sessionFactory.getCurrentSession().saveOrUpdate(studyAttribute);
+    }
+    
+    /**
+     * @see org.openmrs.module.chica.db.ChicaDAO#saveStudyAttributeValue(org.openmrs.module.chica.hibernateBeans.StudyAttributeValue)
+     */
+    public void saveStudyAttributeValue(StudyAttributeValue studyAttributeValue) throws DAOException {
+   		sessionFactory.getCurrentSession().saveOrUpdate(studyAttributeValue);
     }
 }

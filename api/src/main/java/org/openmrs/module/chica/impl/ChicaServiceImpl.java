@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +26,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
@@ -55,6 +57,7 @@ import org.openmrs.module.chica.hibernateBeans.Hcageinf;
 import org.openmrs.module.chica.hibernateBeans.Lenageinf;
 import org.openmrs.module.chica.hibernateBeans.PatientFamily;
 import org.openmrs.module.chica.hibernateBeans.Study;
+import org.openmrs.module.chica.hibernateBeans.StudyAttribute;
 import org.openmrs.module.chica.hibernateBeans.StudyAttributeValue;
 import org.openmrs.module.chica.hibernateBeans.StudySubject;
 import org.openmrs.module.chica.service.ChicaService;
@@ -1106,5 +1109,112 @@ public class ChicaServiceImpl implements ChicaService
 		{
 			ThreadManager threadManager = ThreadManager.getInstance();
 			threadManager.execute(new NewGlookoUserRunnable(firstName, lastName, dateOfBirth, glookoCode), 0);
+		}
+		
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#saveStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)
+		 */
+		public void saveStudyAttribute(StudyAttribute studyAttribute) {
+			
+			org.openmrs.User authenticatedUser = Context.getAuthenticatedUser();
+			studyAttribute.setUuid(UUID.randomUUID().toString());
+			studyAttribute.setDateCreated(new Date());
+			studyAttribute.setCreator(authenticatedUser);
+			
+			try {
+				getChicaDAO().saveStudyAttribute(studyAttribute);
+			} catch (Exception e) {
+				log.error("Error saving study attribute", e);
+			}
+		}
+		
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#voidStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute, String)
+		 */
+		public void voidStudyAttribute(StudyAttribute studyAttribute, String voidReason) throws APIException {
+			if (!studyAttribute.isVoided() || studyAttribute.getVoidedBy() == null) {
+				
+				studyAttribute.setVoided(true);
+				studyAttribute.setVoidReason(voidReason);
+				
+				if (studyAttribute.getVoidedBy() == null) {
+					studyAttribute.setVoidedBy(Context.getAuthenticatedUser());
+				}
+				if (studyAttribute.getDateVoided() == null) {
+					studyAttribute.setDateVoided(new Date());
+				}
+			}
+			Context.getService(ChicaService.class).saveStudyAttribute(studyAttribute);
+		}
+		
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#unvoidStudyAttribute(org.openmrs.module.chica.hibernateBeans.StudyAttribute)
+		 */
+		public void unvoidStudyAttribute(StudyAttribute studyAttribute) throws APIException {
+			
+			studyAttribute.setVoided(false);
+			studyAttribute.setVoidedBy(null);
+			studyAttribute.setDateVoided(null);
+			studyAttribute.setVoidReason(null);
+
+			Context.getService(ChicaService.class).saveStudyAttribute(studyAttribute);
+			
+		}
+
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#getStudyAttributeByName(String)
+		 */
+		public StudyAttribute getStudyAttributeByName(String studyAttributeName) {
+			return getChicaDAO().getStudyAttributeByName(studyAttributeName);
+		}
+		
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#saveStudyAttributeValue(org.openmrs.module.chica.hibernateBeans.StudyAttributeValue)
+		 */
+		public void saveStudyAttributeValue(StudyAttributeValue studyAttributeValue) {
+			
+			org.openmrs.User authenticatedUser = Context.getAuthenticatedUser();
+			studyAttributeValue.setUuid(UUID.randomUUID().toString());
+			studyAttributeValue.setDateCreated(new Date());
+			studyAttributeValue.setCreator(authenticatedUser);
+			
+			try {
+				getChicaDAO().saveStudyAttributeValue(studyAttributeValue);
+			} catch (Exception e) {
+				log.error("Error saving study attribute value", e);
+			}
+		}
+		
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#voidStudyAttributeValue(org.openmrs.module.chica.hibernateBeans.StudyAttributeValue, String)
+		 */
+		public void voidStudyAttributeValue(StudyAttributeValue studyAttributeValue, String voidReason) throws APIException {
+			if (!studyAttributeValue.isVoided() || studyAttributeValue.getVoidedBy() == null) {
+				
+				studyAttributeValue.setVoided(true);
+				studyAttributeValue.setVoidReason(voidReason);
+				
+				if (studyAttributeValue.getVoidedBy() == null) {
+					studyAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
+				}
+				if (studyAttributeValue.getDateVoided() == null) {
+					studyAttributeValue.setDateVoided(new Date());
+				}
+			}
+			Context.getService(ChicaService.class).saveStudyAttributeValue(studyAttributeValue);
+		}
+		
+		/**
+		 * @see org.openmrs.module.chica.service.ChicaService#unvoidStudyAttributeValue(org.openmrs.module.chica.hibernateBeans.StudyAttributeValue)
+		 */
+		public void unvoidStudyAttributeValue(StudyAttributeValue studyAttributeValue) throws APIException {
+			
+			studyAttributeValue.setVoided(false);
+			studyAttributeValue.setVoidedBy(null);
+			studyAttributeValue.setDateVoided(null);
+			studyAttributeValue.setVoidReason(null);
+
+			Context.getService(ChicaService.class).saveStudyAttributeValue(studyAttributeValue);
+			
 		}
 }
