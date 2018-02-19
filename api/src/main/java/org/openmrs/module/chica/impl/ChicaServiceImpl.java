@@ -1117,9 +1117,15 @@ public class ChicaServiceImpl implements ChicaService
 		public void saveStudyAttribute(StudyAttribute studyAttribute) {
 			
 			org.openmrs.User authenticatedUser = Context.getAuthenticatedUser();
-			studyAttribute.setUuid(UUID.randomUUID().toString());
-			studyAttribute.setDateCreated(new Date());
-			studyAttribute.setCreator(authenticatedUser);
+			if (studyAttribute.getUuid() == null) {
+				studyAttribute.setUuid(UUID.randomUUID().toString());
+			}
+			if (studyAttribute.getDateCreated() == null ) {
+				studyAttribute.setDateCreated(new Date());
+			}
+			if (studyAttribute.getCreator() == null ) {
+			 studyAttribute.setCreator(authenticatedUser);
+			}
 			
 			try {
 				getChicaDAO().saveStudyAttribute(studyAttribute);
@@ -1174,9 +1180,15 @@ public class ChicaServiceImpl implements ChicaService
 		public void saveStudyAttributeValue(StudyAttributeValue studyAttributeValue) {
 			
 			org.openmrs.User authenticatedUser = Context.getAuthenticatedUser();
-			studyAttributeValue.setUuid(UUID.randomUUID().toString());
-			studyAttributeValue.setDateCreated(new Date());
-			studyAttributeValue.setCreator(authenticatedUser);
+			if (studyAttributeValue.getUuid() == null) {
+				studyAttributeValue.setUuid(UUID.randomUUID().toString());
+			}
+			if (studyAttributeValue.getDateCreated() == null ) {
+				studyAttributeValue.setDateCreated(new Date());
+			}
+			if (studyAttributeValue.getCreator() == null ) {
+				studyAttributeValue.setCreator(authenticatedUser);
+			}
 			
 			try {
 				getChicaDAO().saveStudyAttributeValue(studyAttributeValue);

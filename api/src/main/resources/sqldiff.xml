@@ -4565,6 +4565,7 @@ from chica_insurance_category where ecw_ins_name is not null and category is not
 			uuid = UUID(),
 			changed_by = 1,
 			creator = 1,
+			date_created = NOW(),
 			date_changed = NOW()
 			WHERE name IN ('Custom Randomizer', 'presnetUrl');
 		
@@ -4600,6 +4601,7 @@ from chica_insurance_category where ecw_ins_name is not null and category is not
 			a.uuid = UUID(),
 			a.changed_by = 1,
 			a.creator = 1,
+			a.date_created = NOW(),
 			a.date_changed = NOW()
 			WHERE a.study_attribute_value_id = b.study_id and a.study_attribute_id = c.study_attribute_id ;
 
